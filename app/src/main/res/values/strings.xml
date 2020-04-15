@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PayNetology</string>
+    <string name="money_enter">Ввод денег</string>
+    <string name="payment_inform">Информация об оплате</string>
+    <string name="credit_card">С банковской карты</string>
+    <string name="mobile">С мобильного телефона</string>
+    <string name="cash">Наличными по адресу</string>
+    <string name="pay_message">Вами выбран метод оплаты : %1$s %2$s %3$s </string>
+    <string name="warning">Вами не выбран метод оплаты</string>
+</resources>
