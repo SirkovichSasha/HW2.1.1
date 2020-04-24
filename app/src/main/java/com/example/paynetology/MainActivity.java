@@ -11,6 +11,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.Nullable;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -20,71 +22,10 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox mBankCardChkBx;
     private CheckBox mMobilePhoneChkBx;
     private CheckBox mCashAddressChkBx;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initViews();
-        mBtnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CheckBox checkBox = null;
-                String inputInfoStr=mInputInfo.getText().toString();
-                String inputMoneyStr=mInputMoney.getText().toString();
-                String errorStr=getString(R.string.warning);
-                try {
-                    checkBox=checked();
-                }catch(NullPointerException e)
-                 {
-                 Toast.makeText(MainActivity.this,errorStr, Toast.LENGTH_SHORT).show();
-                  }
-                 finally {
-                       mInputInfo.getText().clear();
-                       mInputMoney.getText().clear();
-                       resetCheckBoxes();
-                  }
-
-                if (checkBox==null) {
-                    Toast.makeText(MainActivity.this,errorStr, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                String checkBoxName=checkBox.getText().toString();
-                String payMessage=getString(R.string.pay_message,inputMoneyStr,inputInfoStr,checkBoxName);
-                Toast.makeText(MainActivity.this, payMessage, Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
-
-    private void initViews(){
-        mInputMoney = findViewById(R.id.inputMoney);
-        mInputInfo = findViewById(R.id.inputInfo);
-        mBtnOk = findViewById(R.id.btnOK);
-        mBankCardChkBx = findViewById(R.id.bankCardChkBx);
-        mMobilePhoneChkBx = findViewById(R.id.mobilePhoneChkBx);
-        mCashAddressChkBx = findViewById(R.id.cashAddressChkBx);
-    }
-
-    private void resetCheckBoxes(){
-        mBankCardChkBx.setChecked(false);
-        mMobilePhoneChkBx.setChecked(false);
-        mCashAddressChkBx.setChecked(false);
-        mBankCardChkBx.setOnCheckedChangeListener(checkedChangeListener);
-        mMobilePhoneChkBx.setOnCheckedChangeListener(checkedChangeListener);
-        mCashAddressChkBx.setOnCheckedChangeListener(checkedChangeListener);
-    }
-
-    private CheckBox checked()
-    {
-        if (mBankCardChkBx.isChecked()) return mBankCardChkBx;
-        if (mMobilePhoneChkBx.isChecked()) return mMobilePhoneChkBx;
-        if (mCashAddressChkBx.isChecked()) return mCashAddressChkBx;
-        return null;
-    }
-    CompoundButton.OnCheckedChangeListener checkedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+    private CompoundButton.OnCheckedChangeListener checkedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            if (b) {
+        public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+            if (checked) {
                 switch (compoundButton.getId()) {
                     case R.id.bankCardChkBx:
                         resetCheckBoxes();
@@ -106,4 +47,64 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initViews();
+        mBtnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckBox checkBox = null;
+                String inputInfoStr = mInputInfo.getText().toString();
+                String inputMoneyStr = mInputMoney.getText().toString();
+                String errorStr = getString(R.string.warning);
+
+                checkBox = toCheck();
+
+                if (checkBox == null) {
+                    Toast.makeText(MainActivity.this, errorStr, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mInputInfo.getText().clear();
+                mInputMoney.getText().clear();
+                resetCheckBoxes();
+
+
+                String checkBoxName = checkBox.getText().toString();
+                String payMessage = getString(R.string.pay_message, inputMoneyStr, inputInfoStr, checkBoxName);
+                Toast.makeText(MainActivity.this, payMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    private void initViews() {
+        mInputMoney = findViewById(R.id.inputMoney);
+        mInputInfo = findViewById(R.id.inputInfo);
+        mBtnOk = findViewById(R.id.btnOK);
+        mBankCardChkBx = findViewById(R.id.bankCardChkBx);
+        mMobilePhoneChkBx = findViewById(R.id.mobilePhoneChkBx);
+        mCashAddressChkBx = findViewById(R.id.cashAddressChkBx);
+    }
+
+    private void resetCheckBoxes() {
+        mBankCardChkBx.setChecked(false);
+        mMobilePhoneChkBx.setChecked(false);
+        mCashAddressChkBx.setChecked(false);
+        mBankCardChkBx.setOnCheckedChangeListener(checkedChangeListener);
+        mMobilePhoneChkBx.setOnCheckedChangeListener(checkedChangeListener);
+        mCashAddressChkBx.setOnCheckedChangeListener(checkedChangeListener);
+    }
+
+    @Nullable
+    private CheckBox toCheck() {
+        if (mBankCardChkBx.isChecked()) return mBankCardChkBx;
+        if (mMobilePhoneChkBx.isChecked()) return mMobilePhoneChkBx;
+        if (mCashAddressChkBx.isChecked()) return mCashAddressChkBx;
+        return null;
+    }
+
 }
